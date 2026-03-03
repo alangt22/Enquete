@@ -53,7 +53,7 @@ export function CreatePollForm({ onCreated }: CreatePollFormProps) {
     setLoading(true);
     setErrors({});
     
-    options.forEach((opt) => formData.append("options", opt));
+   
     
     const result = await createPoll(formData);
     setLoading(false);
