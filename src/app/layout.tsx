@@ -5,6 +5,7 @@ import { Providers } from "@/providers/providers";
 import { Toaster } from "@/components/ui/sonner";
 import { NavBar } from "./_components/navBar";
 import { Footer } from "./_components/footer";
+import NextTopLoader from "nextjs-toploader";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,6 +34,11 @@ export default function RootLayout({
       >
         <Providers>
           <NavBar />
+                      <NextTopLoader 
+              color="#0194b5" 
+              height={6} 
+              showSpinner={false} 
+            />
           {children}
           <Footer />
           <Toaster

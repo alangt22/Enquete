@@ -3,18 +3,15 @@
 
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { FiLogOut, FiPlus, } from "react-icons/fi";
+import { FiPlus, } from "react-icons/fi";
 import { Polls } from "./_components/polls";
+import { redirect } from "next/navigation";
 
 export default function Dashboard() {
   const { data: session } = useSession();
 
   if (!session) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-white">
-        <p>Você precisa fazer login...</p>
-      </div>
-    );
+    redirect("/login");
   }
 
   return (
