@@ -1,18 +1,19 @@
 
-"use client";
-
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { FiPlus, } from "react-icons/fi";
 import { Polls } from "./_components/polls";
 import { redirect } from "next/navigation";
+import auth from "@/lib/getSession";
 
-export default function Dashboard() {
-  const { data: session } = useSession();
+export default async function Dashboard() {
+    const session = await auth();
 
   if (!session) {
     redirect("/login");
-  }
+  } 
+
+
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-600 via-slate-700 to-slate-500 text-white p-6">

@@ -52,7 +52,7 @@ export default function Login() {
 
           {/* Google */}
           <button
-            onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
+            onClick={() => signIn("google", { redirect: true, callbackUrl: "/dashboard" })}
             className="w-full bg-white text-black font-medium py-2.5 rounded-xl hover:bg-gray-200 transition cursor-pointer"
           >
             <FcGoogle className="w-6 h-6 inline-block mr-2" />

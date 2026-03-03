@@ -34,16 +34,10 @@ export default function RootLayout({
       >
         <Providers>
           <NavBar />
-                      <NextTopLoader 
-              color="#0194b5" 
-              height={6} 
-              showSpinner={false} 
-            />
+          <NextTopLoader color="#0194b5" height={6} showSpinner={false} />
           {children}
           <Footer />
-          <Toaster
-            position="top-right"
-           />
+          <Toaster position="top-right" />
         </Providers>
       </body>
     </html>
