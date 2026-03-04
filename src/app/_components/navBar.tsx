@@ -1,10 +1,14 @@
 "use client";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
+import { useParams, useSearchParams } from "next/navigation";
 import { FiLogOut, FiUser } from "react-icons/fi";
 
 export function NavBar() {
   const { data: session } = useSession();
+    const params = useParams();
+    const pollId = params?.id;
+const loginLink = `/login?callbackUrl=/poll/${pollId}`;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-white/10 backdrop-blur bg-gradient-to-br from-slate-700 via-slate-750 to-slate-800">
@@ -33,13 +37,13 @@ export function NavBar() {
         ) : (
           <div className="flex gap-3">
             <Link
-              href="/login"
+              href={loginLink}
               className="px-4 bg-gray-50 py-2 rounded-xl border border-white/20 hover:bg-white/10 transition"
             >
               Entrar
             </Link>
             <Link
-              href="/register"
+              href={loginLink}
               className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 transition font-medium"
             >
               Criar conta

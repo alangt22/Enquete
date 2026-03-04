@@ -1,19 +1,18 @@
 "use client";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { toast } from "sonner";
-import { redirect, useRouter, useSearchParams } from "next/navigation";
-import { set } from "zod";
-// ================= REGISTER PAGE =================
-export default function RegisterPage() {
+import { useRouter, useSearchParams } from "next/navigation";
+
+function RegisterForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const searchParams = useSearchParams();
-const router = useRouter();
-const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
+  const router = useRouter();
+  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
 
   async function handleRegister() {
     setLoading(true);
@@ -92,5 +91,28 @@ const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
         </div>
       </motion.div>
     </div>
+  );
+}
+
+function LoadingFallback() {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-600 via-slate-700 to-slate-500 flex items-center justify-center px-4">
+      <div className="w-full max-w-md">
+        <div className="bg-black/25 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-8 space-y-5">
+          <div className="text-center space-y-2">
+            <h1 className="text-3xl font-bold text-white">Criar conta</h1>
+            <p className="text-gray-400 text-sm">Carregando...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <RegisterForm />
+    </Suspense>
   );
 }

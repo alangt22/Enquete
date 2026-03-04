@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
@@ -9,15 +9,14 @@ import Link from "next/link";
 import { LoaderButton } from "@/app/_components/loaderbutton";
 import { toast } from "sonner";
 
-// ================= LOGIN PAGE =================
-export default function Login() {
+function LoginForm() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const searchParams = useSearchParams();
-const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
+  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
 
   async function handleCredentialsLogin() {
     setLoading(true);
@@ -121,5 +120,28 @@ const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
         </div>
       </motion.div>
     </div>
+  );
+}
+
+function LoadingFallback() {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-600 via-slate-700 to-slate-500 flex items-center justify-center px-4">
+      <div className="w-full max-w-md">
+        <div className="bg-black/25 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-8 space-y-6">
+          <div className="text-center space-y-2">
+            <h1 className="text-3xl font-bold text-white">Entrar</h1>
+            <p className="text-gray-400 text-sm">Carregando...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function Login() {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <LoginForm />
+    </Suspense>
   );
 }
