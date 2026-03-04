@@ -6,9 +6,12 @@ import { FiLogOut, FiUser } from "react-icons/fi";
 
 export function NavBar() {
   const { data: session } = useSession();
-    const params = useParams();
-    const pollId = params?.id;
-const loginLink = `/login?callbackUrl=/poll/${pollId}`;
+  const params = useParams();
+  const pollId = params?.id;
+  
+  const callbackUrl = pollId ? `/poll/${pollId}` : "/dashboard";
+  const loginLink = `/login?callbackUrl=${callbackUrl}`;
+  const registerLink = `/register?callbackUrl=${callbackUrl}`;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-white/10 backdrop-blur bg-gradient-to-br from-slate-700 via-slate-750 to-slate-800">
@@ -43,7 +46,7 @@ const loginLink = `/login?callbackUrl=/poll/${pollId}`;
               Entrar
             </Link>
             <Link
-              href={loginLink}
+              href={registerLink}
               className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 transition font-medium"
             >
               Criar conta
