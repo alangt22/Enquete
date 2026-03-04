@@ -1,5 +1,4 @@
 
-import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { FiPlus, } from "react-icons/fi";
 import { Polls } from "./_components/polls";

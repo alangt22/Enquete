@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { FcGoogle } from "react-icons/fc";
 import Link from "next/link";
+import { LoaderButton } from "@/app/_components/loaderbutton";
+import { toast } from "sonner";
 
 // ================= LOGIN PAGE =================
 export default function Login() {
@@ -29,6 +31,7 @@ export default function Login() {
 
     if (res?.error) {
       setError("Email ou senha incorretos");
+      toast.warning("Falha ao entrar: senha ou email inválidos");
     } else {
       router.push("/dashboard");
     }
@@ -51,13 +54,21 @@ export default function Login() {
           </div>
 
           {/* Google */}
-          <button
-            onClick={() => signIn("google", { redirect: true, callbackUrl: "/dashboard" })}
-            className="w-full bg-white text-black font-medium py-2.5 rounded-xl hover:bg-gray-200 transition cursor-pointer"
+          <LoaderButton
+            className="w-full bg-white text-black font-medium rounded-xl hover:bg-gray-200 transition cursor-pointer flex items-center justify-center gap-2"
+            loading={loading}
+            onClick={async () => {
+              setLoading(true);
+              await signIn("google", {
+                redirect: true,
+                callbackUrl: "/dashboard",
+              });
+              setLoading(false);
+            }}
           >
-            <FcGoogle className="w-6 h-6 inline-block mr-2" />
+            <FcGoogle size={20} />
             Entrar com Google
-          </button>
+          </LoaderButton>
 
           {/* Divider */}
           <div className="flex items-center gap-3 text-gray-400 text-sm">

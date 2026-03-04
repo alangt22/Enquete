@@ -5,6 +5,8 @@ import { FiExternalLink, FiTrash2 } from "react-icons/fi";
 import { toast } from "sonner";
 import { deletarPoll } from "../_actions/deletar-poll";
 import { encerrarPoll } from "../_actions/encerrar-poll";
+import { LoaderButton } from "@/app/_components/loaderbutton";
+import { set } from "zod";
 
 type PollOption = {
   id: string;
@@ -22,6 +24,7 @@ type PollType = {
 export function Polls() {
   const [polls, setPolls] = useState<PollType[]>([]);
   const [loading, setLoading] = useState(true);
+  const [closingId, setClosingId] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadPolls() {
@@ -49,6 +52,8 @@ export function Polls() {
   }, []);
 
   async function encerrarEnquete(pollId: string) {
+    setClosingId(pollId);
+
     const formData = new FormData();
     formData.append("id", pollId);
 
@@ -56,16 +61,20 @@ export function Polls() {
 
     if (result?.error) {
       toast.error(result.error);
+      setClosingId(null);
       return;
     }
 
     toast.success(result?.success);
+
 
     setPolls((prev) =>
       prev.map((poll) =>
         poll.id === pollId ? { ...poll, status: false } : poll,
       ),
     );
+
+      setClosingId(null);
   }
 
   async function handleDelete(pollId: string) {
@@ -147,12 +156,13 @@ export function Polls() {
                     </div>
                   )}
                   {poll.status === true && (
-                    <button
+                    <LoaderButton
+                      loading={closingId === poll.id}
                       onClick={() => encerrarEnquete(poll.id)}
                       className="bg-red-600 cursor-pointer hover:bg-red-500 transition px-4 py-2 rounded-xl font-medium mt-2"
                     >
                       Encerrar enquete
-                    </button>
+                    </LoaderButton>
                   )}
                 </div>
               </div>

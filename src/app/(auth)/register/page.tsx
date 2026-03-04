@@ -4,13 +4,19 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { toast } from "sonner";
 import { redirect } from "next/navigation";
+import { set } from "zod";
 // ================= REGISTER PAGE =================
 export default function RegisterPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
 
   async function handleRegister() {
+    setLoading(true);
+
+    
     const res = await fetch("/api/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -21,10 +27,12 @@ export default function RegisterPage() {
 
     if (!res.ok) {
       toast(data.error || "Erro desconhecido");
+      setLoading(false);
       return;
     }
 
-    toast("Conta criada!");
+    toast.success("Conta criada com sucesso! Faça login para continuar.");
+    setLoading(false);
     redirect("/login");
   }
 
@@ -63,10 +71,11 @@ export default function RegisterPage() {
             />
 
             <button
+              disabled={loading}
               onClick={handleRegister}
               className="cursor-pointer bg-emerald-500 hover:bg-emerald-600 text-white font-medium py-2.5 rounded-xl transition"
             >
-              Criar conta
+              {loading ? "Aguarde..." : "Registrar"}
             </button>
             <p className="text-gray-400 text-sm text-center">
               Ja possui uma conta?{" "}
