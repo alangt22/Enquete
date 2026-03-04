@@ -3,7 +3,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { toast } from "sonner";
-import { redirect } from "next/navigation";
+import { redirect, useRouter, useSearchParams } from "next/navigation";
 import { set } from "zod";
 // ================= REGISTER PAGE =================
 export default function RegisterPage() {
@@ -11,7 +11,9 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const searchParams = useSearchParams();
+const router = useRouter();
+const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
 
   async function handleRegister() {
     setLoading(true);
@@ -33,7 +35,7 @@ export default function RegisterPage() {
 
     toast.success("Conta criada com sucesso! Faça login para continuar.");
     setLoading(false);
-    redirect("/login");
+    router.push(`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`);
   }
 
   return (

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { FcGoogle } from "react-icons/fc";
 import Link from "next/link";
@@ -16,6 +16,8 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const searchParams = useSearchParams();
+const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
 
   async function handleCredentialsLogin() {
     setLoading(true);
@@ -33,7 +35,7 @@ export default function Login() {
       setError("Email ou senha incorretos");
       toast.warning("Falha ao entrar: senha ou email inválidos");
     } else {
-      router.push("/dashboard");
+      router.push(callbackUrl);
     }
   }
 
@@ -61,7 +63,7 @@ export default function Login() {
               setLoading(true);
               await signIn("google", {
                 redirect: true,
-                callbackUrl: "/dashboard",
+                callbackUrl,
               });
               setLoading(false);
             }}
@@ -109,7 +111,7 @@ export default function Login() {
             <p className="text-gray-400 text-sm text-center">
               Não possui uma conta?{" "}
               <Link
-                href="/register"
+                href={`/register?callbackUrl=${encodeURIComponent(callbackUrl)}`}
                 className="inline-block px-4 py-1.5 rounded-lg text-white border border-white/20 hover:border-blue-500 hover:text-blue-400 hover:shadow-[0_0_15px_rgba(59,130,246,0.5)] transition-all duration-300"
               >
                 Registre-se
